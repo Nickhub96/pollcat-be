@@ -4,7 +4,8 @@ const {
   getQuestionById,
   postQuestion,
   patchQuestionById,
-  deleteQuestionById
+  deleteQuestionById,
+  getAnswerByQID
 } = require("../controllers/questions-controller");
 
 questionsRouter
@@ -17,5 +18,7 @@ questionsRouter
   .get(getQuestionById)
   .patch(patchQuestionById)
   .delete(deleteQuestionById);
+
+questionsRouter.route("/:question_id/answers").get(getAnswerByQID);
 
 module.exports = questionsRouter;

@@ -32,6 +32,7 @@ describe("app", () => {
           .get("/api/questions")
           .expect(200)
           .then(res => {
+            console.log(res.body.questions);
             expect(res.body.questions).to.be.an("array");
             expect(res.body.questions[0]).to.have.keys(
               "question_id",
@@ -123,6 +124,39 @@ describe("app", () => {
         return request(app)
           .delete("/api/questions/3")
           .expect(204);
+      });
+      describe("/answers", () => {
+        it("GET:200 responds with a single answer of a given user", () => {
+          return request(app)
+            .get(
+              "/api/questions/1/answers?userUid=9wYP0SqImSYOlwnWWOXkFPzpFvu1"
+            )
+            .expect(200)
+            .then(res => {
+              expect(res.body.answer).to.be.an("object");
+              expect(res.body.answer).to.have.keys(
+                "answer_id",
+                "answerIndex",
+                "userUid",
+                "question_id",
+                "townName",
+                "countyName",
+                "timePosted"
+              );
+              expect(res.body.answer.question_id).to.equal(1);
+              expect(res.body.answer.userUid).to.equal(
+                "9wYP0SqImSYOlwnWWOXkFPzpFvu1"
+              );
+            });
+        });
+        it("GET:200 responds with an empty object if the answer does not exist", () => {
+          return request(app)
+            .get("/api/questions/3/answers?userUid=55")
+            .expect(200)
+            .then(res => {
+              expect(res.body.answer).to.be.an("object");
+            });
+        });
       });
     });
   });

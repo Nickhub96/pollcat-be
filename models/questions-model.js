@@ -81,3 +81,29 @@ exports.insertQuestion = ({
       } else return res[0];
     });
 };
+
+exports.selectAnswersByQID = ({ question_id }, { userUid }) => {
+  return connection("answers")
+    .select("answers.*")
+    .from("answers")
+    .where("answers.question_id", question_id)
+    .modify(function(query) {
+      if (userUid) query.where("answers.userUid", userUid);
+    })
+    .then(res => {
+      if (res.length === 0 && question_id) {
+        return exports.emptyArrayIfQuestionExists(question_id);
+      } else {
+        return res;
+      }
+    });
+};
+
+exports.emptyArrayIfQuestionExists = question_id => {
+  return connection("answers")
+    .select("*")
+    .where("answers.question_id", question_id)
+    .then(res => {
+      return [{}];
+    });
+};

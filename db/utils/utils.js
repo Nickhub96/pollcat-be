@@ -4,7 +4,7 @@ exports.formatAnswerDates = list => {
    */
   const formatDates = list.map(obj => {
     const copyObj = { ...obj };
-    copyObj.timePosted = new Date(copyObj.timePosted);
+    copyObj.timePosted = new Date(copyObj.timePosted * 1000);
     return copyObj;
   });
   return formatDates;
@@ -16,7 +16,7 @@ exports.formatQuestionDates = list => {
    */
   const formatDates = list.map(obj => {
     const copyObj = { ...obj };
-    copyObj.startTime = new Date(copyObj.startTime);
+    copyObj.startTime = new Date(copyObj.startTime * 1000);
     return copyObj;
   });
   return formatDates;

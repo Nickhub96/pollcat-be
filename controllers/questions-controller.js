@@ -3,7 +3,8 @@ const {
   selectQuestionById,
   updateQuestionById,
   removeQuestionById,
-  insertQuestion
+  insertQuestion,
+  selectAnswersByQID
 } = require("../models/questions-model");
 
 exports.getQuestions = (req, res, next) => {
@@ -50,6 +51,16 @@ exports.postQuestion = (req, res, next) => {
   insertQuestion(req.body)
     .then(question => {
       res.status(201).send({ question });
+    })
+    .catch(err => {
+      next(err);
+    });
+};
+
+exports.getAnswerByQID = (req, res, next) => {
+  selectAnswersByQID(req.params, req.query)
+    .then(([answer]) => {
+      res.status(200).send({ answer });
     })
     .catch(err => {
       next(err);
