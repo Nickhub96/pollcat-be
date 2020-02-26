@@ -32,7 +32,6 @@ describe("app", () => {
           .get("/api/questions")
           .expect(200)
           .then(res => {
-            console.log(res.body.questions);
             expect(res.body.questions).to.be.an("array");
             expect(res.body.questions[0]).to.have.keys(
               "question_id",
@@ -155,6 +154,95 @@ describe("app", () => {
             .expect(200)
             .then(res => {
               expect(res.body.answer).to.be.an("object");
+            });
+        });
+      });
+    });
+    describe("/answers", () => {
+      it("responds with the posted answer", () => {
+        request(app)
+          .post("/api/answers")
+          .send({
+            question_id: 1,
+            userUid: "9wYP0SqImSYOlwnWWOXkFPzpFvu4",
+            answerIndex: 0,
+            townName: "Oldham",
+            countyName: "Greater Manchester"
+          })
+          .expect(201)
+          .then(res => {
+            // console.log(res.body.answer);
+            expect(res.body.answer).to.be.an("object");
+            expect(res.body.answer).to.have.keys(
+              "question_id",
+              "userUid",
+              "answerIndex",
+              "townName",
+              "countyName",
+              "answer_id",
+              "timePosted"
+            );
+            expect(res.body.answer.question_id).to.equal(1);
+          });
+      });
+      it.only("responds with an array of all the answers from a given location", () => {
+        request(app)
+          .get("/api/answers?townName=Oldham&countyName=Greater%20Manchester")
+          .expect(200)
+          .then(res => {
+            const output = res.body.answers.every(answer => {
+              return answer.townName === "Oldham";
+            });
+            expect(output).to.be.true;
+            expect(res.body.answers).to.be.an("array");
+            expect(res.body.answers[0]).to.have.keys(
+              "question_id",
+              "userUid",
+              "answerIndex",
+              "townName",
+              "countyName",
+              "answer_id",
+              "timePosted"
+            );
+          });
+      });
+      describe("/:question_id", () => {
+        it("return an array of all the answers for that question", () => {
+          request(app)
+            .get("/api/answers/1")
+            .expect(200)
+            .then(res => {
+              expect(res.body.answers).to.be.an("array");
+              expect(res.body.answers[0]).to.have.keys(
+                "question_id",
+                "userUid",
+                "answerIndex",
+                "townName",
+                "countyName",
+                "answer_id",
+                "timePosted"
+              );
+            });
+        });
+        it("return an array of all the answers for that question filtered by the answer", () => {
+          request(app)
+            .get("/api/answers/1?answerIndex=0")
+            .expect(200)
+            .then(res => {
+              expect(res.body.answers).to.be.an("array");
+              expect(res.body.answers[0]).to.have.keys(
+                "question_id",
+                "userUid",
+                "answerIndex",
+                "townName",
+                "countyName",
+                "answer_id",
+                "timePosted"
+              );
+              const output = res.body.answers.every(answer => {
+                return answer.answerIndex === 0;
+              });
+              expect(output).to.be.true;
             });
         });
       });

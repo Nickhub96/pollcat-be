@@ -7,8 +7,6 @@ const {
   answerFormatter
 } = require("../utils/utils.js");
 
-console.log(process.env.NODE_ENV);
-
 exports.seed = function(knex) {
   return knex.migrate
     .rollback()
