@@ -76,7 +76,6 @@ describe("app", () => {
               "answerArray"
             );
             expect(res.body.question.question).to.equal("new question");
-            //expect(res.body.question.startTime).to.equal("");
           });
       });
     });
@@ -171,7 +170,6 @@ describe("app", () => {
           })
           .expect(201)
           .then(res => {
-            // console.log(res.body.answer);
             expect(res.body.answer).to.be.an("object");
             expect(res.body.answer).to.have.keys(
               "question_id",

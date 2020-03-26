@@ -25,7 +25,6 @@ exports.getAnswersForQuest = (req, res, next) => {
 };
 
 exports.getAnswersByLocation = (req, res, next) => {
-  console.log(req.query, "in the controller");
   selectAnswersByLocation(req.query)
     .then(answers => {
       res.status(200).send({ answers });
